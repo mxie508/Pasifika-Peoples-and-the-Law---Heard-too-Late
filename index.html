@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Heard Too Late</title>
+<meta name="description" content="A short interactive story about Pasifika families, section 27 of the Sentencing Act 2002, and why being heard at sentencing comes too late.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#EEF1EF; --paper-2:#E6ECE9; --paper-3:#DCE4E3; --paper-4:#D2DCDD;
+  --card:#FFFFFF; --ink:#1C2326; --muted:#4A565A; --line:#BFC9C6;
+  --rock:#A8977F; --rock-edge:#7D6D57; --grass:#3E6A4C; --ground:#5C6B6E;
+  --sea:#1F5F69; --sea-soft:#D4E6E7; --alert:#9E2430; --alert-soft:#F4DEDF;
+  --bg:var(--paper);
+  --serif:"Young Serif", Georgia, "Times New Roman", serif;
+  --sans:"Atkinson Hyperlegible", "Segoe UI", Verdana, Arial, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#161C1E; --paper-2:#131A1C; --paper-3:#10171A; --paper-4:#0C1316;
+    --card:#1F272A; --ink:#E7ECEA; --muted:#AAB6B4; --line:#3A4649;
+    --rock:#5E5444; --rock-edge:#8F7F68; --grass:#6E9E7C; --ground:#3B4649;
+    --sea:#7EC2CB; --sea-soft:#1D3337; --alert:#F08A93; --alert-soft:#3A2023;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#161C1E; --paper-2:#131A1C; --paper-3:#10171A; --paper-4:#0C1316;
+  --card:#1F272A; --ink:#E7ECEA; --muted:#AAB6B4; --line:#3A4649;
+  --rock:#5E5444; --rock-edge:#8F7F68; --grass:#6E9E7C; --ground:#3B4649;
+  --sea:#7EC2CB; --sea-soft:#1D3337; --alert:#F08A93; --alert-soft:#3A2023;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1.125rem;line-height:1.6;transition:background-color .6s ease}
+body[data-depth="2"]{--bg:var(--paper-2)}
+body[data-depth="3"]{--bg:var(--paper-3)}
+body[data-depth="4"]{--bg:var(--paper-4)}
+a{color:var(--sea)}
+:focus-visible{outline:3px solid var(--sea);outline-offset:3px;border-radius:4px}
+h1:focus,main:focus{outline:none}
+.skip{position:absolute;left:-999px;top:0;background:var(--card);padding:.5rem 1rem;z-index:5}
+.skip:focus{left:1rem;top:1rem}
+
+/* header */
+.top{max-width:1100px;margin:0 auto;padding:1rem 1.25rem;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;align-items:baseline;justify-content:space-between}
+.brand{font-family:var(--serif);font-size:1.25rem;text-decoration:none;color:var(--ink)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.25rem .9rem;font-size:.95rem}
+.steps a{color:var(--muted);text-decoration:none;padding:.15rem 0;border-bottom:2px solid transparent}
+.steps a[aria-current="step"]{color:var(--ink);border-bottom-color:var(--sea)}
+.steps span{font-variant-numeric:tabular-nums;margin-right:.3rem}
+
+/* layout */
+.layout{max-width:1100px;margin:0 auto;padding:0 1.25rem 3rem;display:grid;grid-template-columns:210px minmax(0,1fr);gap:2.5rem}
+.gauge{position:sticky;top:calc(1rem + env(safe-area-inset-top,0px));align-self:start}
+.gauge svg{width:100%;height:auto;display:block}
+.gauge figcaption{font-size:.85rem;color:var(--muted);margin-top:.5rem}
+.mini{display:none}
+main{max-width:66ch}
+.page{display:none}
+.page.on{display:block}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.15;margin:0 0 .75rem}
+h1{font-size:clamp(2.4rem,6vw,4rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,3.5vw,2.2rem);margin-top:2.5rem}
+h3{font-size:1.3rem;margin-top:2rem}
+.place{color:var(--muted);font-size:1rem;margin:0 0 1rem}
+.lede{font-size:1.3rem;line-height:1.5;margin:0 0 1.25rem}
+.note{font-size:1rem;color:var(--muted);border-left:3px solid var(--line);padding-left:1rem;margin:1.25rem 0 2rem}
+.scene p{margin:0 0 1rem}
+.quote{font-family:var(--serif);font-size:1.35rem;line-height:1.4;margin:1.25rem 0;padding-left:1rem;border-left:3px solid var(--alert)}
+.weight{font-weight:700}
+
+/* glossary terms */
+.term{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:help;text-decoration:underline dotted var(--sea);text-decoration-thickness:2px;text-underline-offset:4px}
+.def{display:block;margin:.5rem 0 1rem;padding:.6rem .9rem;background:var(--sea-soft);border-radius:6px;font-size:1rem}
+.def[hidden]{display:none}
+
+/* choices */
+.prompt{font-weight:700;margin:2rem 0 .75rem}
+.choices{display:grid;gap:.6rem;margin:0 0 1rem}
+.choice{font:inherit;text-align:left;width:100%;padding:.85rem 1rem;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:8px;cursor:pointer}
+.choice:hover{border-color:var(--sea)}
+.choice[aria-pressed="true"]{border-color:var(--sea);box-shadow:inset 4px 0 0 var(--sea)}
+.choice.locked{border-style:dashed;border-color:var(--alert);color:var(--muted);text-decoration:line-through;text-decoration-color:var(--alert);box-shadow:none;cursor:not-allowed}
+.choice.locked::after{content:"  \1F512";text-decoration:none;display:inline-block;margin-left:.4rem}
+.result{margin:.25rem 0 1rem;padding:.9rem 1rem;background:var(--card);border-radius:8px;border:1px solid var(--line)}
+.result p{margin:0 0 .6rem}.result p:last-child{margin:0}
+.result.block{border-left:4px solid var(--alert)}
+.outcome{margin:2rem 0 1rem;padding:1.25rem 1.25rem .5rem;background:var(--card);border-radius:10px;border:1px solid var(--line)}
+.outcome p{margin:0 0 .8rem}
+
+/* explainer */
+.plain{margin:1.5rem 0;padding:1.1rem 1.25rem;border:2px solid var(--ink);border-radius:10px;background:var(--card)}
+.plain h3{margin-top:0;font-size:1.2rem}
+.plain p{margin:0 0 .6rem}.plain p:last-child{margin:0}
+
+/* research notes */
+details.why{margin:1.5rem 0;border-left:3px solid var(--sea);padding:.25rem 0 .25rem 1rem;font-size:1rem}
+details.why summary{cursor:pointer;color:var(--sea);font-weight:700}
+details.why p{margin:.5rem 0}
+details.voice{margin:2rem 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.25rem;font-size:1rem}
+details.voice summary{cursor:pointer;font-family:var(--serif);font-size:1.15rem}
+details.voice p{margin:.75rem 0 0}
+
+/* buttons */
+.go{font:inherit;font-weight:700;display:inline-block;margin:1.5rem 0 0;padding:.85rem 1.4rem;border-radius:999px;border:0;background:var(--sea);color:var(--paper);text-decoration:none;cursor:pointer}
+.go.quiet{background:transparent;color:var(--sea);border:2px solid var(--sea)}
+.go[hidden]{display:none}
+
+/* sentencing */
+.desk{margin:1rem 0 0;padding:.75rem 1rem;background:var(--paper);border-radius:6px;font-size:1rem}
+.desk ul{margin:.25rem 0 0;padding-left:1.2rem}
+.same{font-family:var(--serif);font-size:1.3rem;line-height:1.4;margin:1.5rem 0}
+
+/* the cliff */
+.firstheard{position:sticky;top:calc(.5rem + env(safe-area-inset-top,0px));z-index:2;margin:1.5rem 0;padding:.9rem 1.1rem;background:var(--ink);color:var(--paper);border-radius:10px}
+.firstheard p{margin:0}
+.firstheard strong{font-family:var(--serif);font-weight:400;font-size:1.3rem;display:block;line-height:1.3}
+.cliff{list-style:none;margin:0;padding:0 0 0 2.2rem;position:relative}
+.cliff::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1.4rem;background:var(--rock);clip-path:polygon(0 0,100% 0,70% 12%,100% 25%,60% 40%,95% 55%,55% 70%,90% 84%,50% 100%,0 100%)}
+.ledge{position:relative;padding:1rem 0 1.25rem;border-top:1px solid var(--line)}
+.ledge:first-child{border-top:0}
+.ledge h3{margin:0 0 .25rem;font-size:1.2rem}
+.ledge .was{color:var(--muted);font-size:1rem;margin:0 0 .5rem}
+.fence{position:absolute;left:-2.2rem;top:1.15rem;width:1.4rem;height:1.4rem;border-radius:50%;background:var(--paper);border:3px solid var(--rock-edge)}
+.ledge.lit .fence{background:var(--grass);border-color:var(--grass)}
+.switch{display:flex;gap:.75rem;align-items:flex-start;margin:.5rem 0;cursor:pointer}
+.switch input{appearance:none;flex:none;width:2.6rem;height:1.5rem;border-radius:999px;background:var(--line);position:relative;cursor:pointer;margin:.1rem 0 0;transition:background .2s}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:1.1rem;height:1.1rem;border-radius:50%;background:var(--card);transition:transform .2s}
+.switch input:checked{background:var(--grass)}
+.switch input:checked::after{transform:translateX(1.1rem)}
+.switch span{font-weight:700}
+.now{margin:.25rem 0 .5rem 3.35rem;padding:.6rem .9rem;background:var(--sea-soft);border-radius:6px;font-size:1rem}
+.now[hidden]{display:none}
+.bottom{margin:1rem 0 0;padding:1.1rem 1.25rem;border-radius:10px;background:var(--alert-soft);border:1px solid var(--alert)}
+.bottom h3{margin:0 0 .4rem;font-size:1.2rem}
+.bottom p{margin:0}
+.numbers{display:grid;gap:1rem;margin:1rem 0;padding:0;list-style:none}
+.numbers li{padding:1rem 1.1rem;background:var(--card);border-radius:8px;border:1px solid var(--line)}
+.numbers b{font-family:var(--serif);font-weight:400;font-size:1.6rem;line-height:1.2;display:block}
+.help{padding-left:1.2rem}.help li{margin-bottom:.5rem}
+.close{font-family:var(--serif);font-size:clamp(1.6rem,3.5vw,2.2rem);line-height:1.25;margin:2.5rem 0 1rem}
+
+footer{max-width:1100px;margin:0 auto;padding:1.5rem 1.25rem 3rem;border-top:1px solid var(--line);font-size:.95rem;color:var(--muted)}
+footer details summary{cursor:pointer;color:var(--ink);font-weight:700}
+footer ul{padding-left:1.2rem}
+footer li{margin-bottom:.35rem}
+
+@media (max-width:820px){
+  .layout{grid-template-columns:1fr;gap:0}
+  .gauge{position:static}
+  .gauge svg,.gauge figcaption{display:none}
+  .mini{display:block;margin:0 0 1.25rem}
+  .mini .bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+  .mini .fill{height:100%;background:var(--sea);width:20%;transition:width .4s}
+  .mini p{margin:.4rem 0 0;font-size:.95rem;color:var(--muted)}
+  .steps{font-size:.9rem}
+  .now{margin-left:0}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body data-depth="1">
+<a class="skip" href="#story">Skip to the story</a>
+
+<header class="top">
+  <a class="brand" href="#call">Heard Too Late</a>
+  <nav aria-label="Story steps">
+    <ol class="steps">
+      <li><a href="#call" data-step="call"><span>1</span>The call</a></li>
+      <li><a href="#bail" data-step="bail"><span>2</span>Before court</a></li>
+      <li><a href="#heard" data-step="heard"><span>3</span>Being heard</a></li>
+      <li><a href="#sentencing" data-step="sentencing"><span>4</span>Sentencing</a></li>
+      <li><a href="#cliff" data-step="cliff"><span>5</span>Replay with change</a></li>
+    </ol>
+  </nav>
+</header>
+
+<div class="layout">
+  <figure class="gauge" aria-hidden="true">
+    <svg viewBox="0 0 200 580">
+      <rect x="0" y="530" width="200" height="50" fill="var(--ground)"/>
+      <path d="M0 50 L112 50 L120 80 L104 130 L124 180 L100 240 L118 300 L96 360 L114 420 L92 480 L104 530 L0 530 Z" fill="var(--rock)" stroke="var(--rock-edge)" stroke-width="2"/>
+      <line x1="0" y1="50" x2="112" y2="50" stroke="var(--grass)" stroke-width="6"/>
+      <path d="M30 50 L30 32 L42 22 L54 32 L54 50 Z" fill="var(--grass)"/>
+      <rect x="66" y="38" width="10" height="12" fill="var(--grass)"/>
+      <g fill="var(--muted)" font-family="Atkinson Hyperlegible, Verdana, sans-serif" font-size="16">
+        <text x="0" y="18">Community</text>
+        <text x="128" y="135">The call</text>
+        <text x="126" y="245">Bail</text>
+        <text x="122" y="365">Being</text><text x="122" y="383">heard</text>
+        <text x="112" y="490">Sentencing</text>
+      </g>
+      <g transform="translate(124 500)">
+        <rect x="0" y="6" width="54" height="24" rx="3" fill="var(--card)" stroke="var(--alert)" stroke-width="2"/>
+        <rect x="38" y="0" width="16" height="14" rx="2" fill="var(--card)" stroke="var(--alert)" stroke-width="2"/>
+        <path d="M17 12 h6 v5 h5 v6 h-5 v5 h-6 v-5 h-5 v-6 h5 z" fill="var(--alert)"/>
+        <circle cx="12" cy="31" r="5" fill="var(--ink)"/><circle cx="44" cy="31" r="5" fill="var(--ink)"/>
+      </g>
+      <circle id="marker" cx="112" cy="130" r="9" fill="var(--sea)" stroke="var(--paper)" stroke-width="3" style="transition:cy .6s ease, cx .6s ease"/>
+    </svg>
+  </figure>
+
+  <main id="story" tabindex="-1">
+    <div class="mini" aria-hidden="true"><div class="bar"><div class="fill" id="miniFill"></div></div><p id="miniCap">Step 1 of 5</p></div>
+
+    <!-- 1 THE CALL -->
+    <section class="page" id="p-call" aria-labelledby="h-call">
+      <h1 id="h-call" tabindex="-1">Heard too late</h1>
+      <p class="lede">A short story you play, about who gets heard in court, and when.</p>
+      <p class="note">This family is made up, but every barrier they meet comes from New Zealand law and Pacific-led research. Pacific peoples are many peoples; this is one family's story. Content note: arrest, prison, assault.</p>
+
+      <div class="scene">
+        <p class="place">Ōtara, 2.14am</p>
+        <p>You're on a break at the distribution centre when Kui, your grandmother, calls.</p>
+        <p class="quote">"Vili's been arrested. He's at the station. He's asking for you."</p>
+        <p>Vili is your cousin. He's 19. Since his mum moved to Brisbane for work, he's slept on Kui's couch, or in his car when the house is full. Last month the packhouse cut his shifts.</p>
+        <p>Tonight he drove two older guys to a liquor store. They broke in. A security guard was hurt when they ran.</p>
+        <p class="weight">Vili did something wrong, and someone was hurt. Both are true. This story is about what the court gets to know about Vili, and when.</p>
+      </div>
+
+      <p class="prompt" id="q-call">What do you do?</p>
+      <div class="choices" role="group" aria-labelledby="q-call">
+        <button class="choice" aria-pressed="false" data-res="r-call-1">Drive to the station</button>
+        <button class="choice" aria-pressed="false" data-res="r-call-2">Message the family chat</button>
+      </div>
+      <div aria-live="polite">
+        <div class="result" id="r-call-1" hidden><p>They won't let you see him. An officer says he'll go before a judge in the morning.</p></div>
+        <div class="result" id="r-call-2" hidden><p>Uncle Tevita says get him a lawyer. Nobody knows how.</p></div>
+      </div>
+      <a class="go" href="#bail" data-next hidden>Go to court</a>
+    </section>
+
+    <!-- 2 BEFORE COURT -->
+    <section class="page" id="p-bail" aria-labelledby="h-bail">
+      <p class="place">Manukau District Court, 9am</p>
+      <h1 id="h-bail" tabindex="-1">Before court</h1>
+      <div class="scene">
+        <p>The waiting room is full. Vili is one of dozens on today's list. A <button class="term" aria-expanded="false" aria-controls="d-duty">duty lawyer</button> calls you over. She has a few minutes.</p>
+        <span class="def" id="d-duty" hidden>A free lawyer at court for people who don't have their own lawyer yet.</span>
+      </div>
+
+      <p class="prompt" id="q-bail">What do you tell her?</p>
+      <div class="choices" role="group" aria-labelledby="q-bail">
+        <button class="choice" aria-pressed="false" data-res="r-bail-1">"He can stay at Kui's."</button>
+        <button class="choice" aria-pressed="false" data-res="r-bail-2">"He's got nowhere to stay."</button>
+        <button class="choice" aria-pressed="false" data-res="r-bail-3">Tell her about his life</button>
+      </div>
+      <div aria-live="polite">
+        <div class="result" id="r-bail-1" hidden><p>Kui's house already has eleven people in three bedrooms. The lawyer doubts a judge will accept it.</p></div>
+        <div class="result" id="r-bail-2" hidden><p>Honest. It also means there's no address to bail him to.</p></div>
+        <div class="result" id="r-bail-3" hidden><p>You start on his mum leaving, the lost shifts, the car. She stops you. "That might matter later, at sentencing. Today is about bail."</p></div>
+      </div>
+
+      <div class="outcome" id="o-bail" hidden aria-live="polite">
+        <p>The judge asks about an address. There isn't a suitable one. Vili is <button class="term" aria-expanded="false" aria-controls="d-remand">remanded in custody</button>.</p>
+        <span class="def" id="d-remand" hidden>Kept in prison while the case carries on, before any sentence.</span>
+        <p>He spends four months there. He loses his job. His car is towed.</p>
+        <p class="weight">Everything the judge will later need to know about Vili existed this morning. There was nowhere to put it.</p>
+      </div>
+
+      <details class="why">
+        <summary>Where this comes from</summary>
+        <p>Bail turns on risk, such as whether someone will come back to court or reoffend (Bail Act 2000, s 8). An address helps a court manage that risk. Remand time counts towards any later prison sentence. It doesn't bring back the job.</p>
+      </details>
+
+      <details class="voice">
+        <summary>From the counsel table</summary>
+        <p>In 2025 I interned with the Police Prosecution Service at Manukau. I'm not Pasifika; my parents are Chinese. Prosecutors often handled twenty-plus matters a session, from files received that morning. I saw people held on remand for months, as far as I could tell because they had nowhere to go. I believe I came across a section 27 report once, and it passed me by. My view was from one side of the room, so this story leans on Pacific research rather than on what I saw.</p>
+      </details>
+
+      <a class="go" href="#heard" data-next hidden>Skip ahead four months</a>
+    </section>
+
+    <!-- 3 BEING HEARD -->
+    <section class="page" id="p-heard" aria-labelledby="h-heard">
+      <p class="place">Four months later</p>
+      <h1 id="h-heard" tabindex="-1">Being heard</h1>
+      <div class="scene">
+        <p>Vili pleads guilty. His lawyer mentions a law that can bring his background into the courtroom.</p>
+      </div>
+
+      <div class="plain">
+        <h3>Section 27, in plain words</h3>
+        <p>Before sentencing, a person can ask the court to hear from people about their family, community and culture, how that connects to the offending, and what support is around them. The judge must listen unless there's a special reason not to, can <button class="term" aria-expanded="false" aria-controls="d-adj">adjourn</button> to make time for it, and can suggest it if nobody asks.</p>
+        <span class="def" id="d-adj" hidden>Pause the case and pick it up on a later date.</span>
+        <p>Being heard doesn't promise a shorter sentence. The judge decides how much it counts.</p>
+      </div>
+
+      <p class="prompt" id="q-heard">Sentencing is in three weeks. Try each option.</p>
+      <div class="choices" role="group" aria-labelledby="q-heard">
+        <button class="choice" aria-pressed="false" data-res="r-heard-1" data-lock>Get a cultural report written</button>
+        <button class="choice" aria-pressed="false" data-res="r-heard-2" data-lock>Speak in court yourself</button>
+        <button class="choice" aria-pressed="false" data-res="r-heard-3">Write a letter to the judge</button>
+      </div>
+      <div aria-live="polite">
+        <div class="result block" id="r-heard-1" hidden>
+          <p>Since March 2024, <button class="term" aria-expanded="false" aria-controls="d-la">legal aid</button> no longer pays for these reports. Your family would have to pay privately.</p>
+          <span class="def" id="d-la" hidden>Government funding that pays for a lawyer, and some costs, for people who can't afford them.</span>
+          <p>Kui says she'll ask around for the money. She doesn't know yet if she can find it.</p>
+        </div>
+        <div class="result block" id="r-heard-2" hidden>
+          <p>The hearing gets moved twice. The third time, your manager won't give you the day off. Legal aid can't cover costs of family speaking either.</p>
+        </div>
+        <div class="result" id="r-heard-3" hidden>
+          <p>You write it at 4am after a shift: Kui's story of police at the door before dawn in 1976, Vili walking the little cousins to school, the first night he slept in the car.</p>
+          <p>It reaches the judge. But it's from family, not an "independent" writer, and nobody has linked his history to the offending the way the law looks for.</p>
+        </div>
+      </div>
+
+      <details class="why">
+        <summary>Where this comes from</summary>
+        <p>The Legal Services Amendment Act 2024 stopped legal aid paying for section 27 reports and statements, written or spoken. Report Two's Knowledge Holders describe shift work, childcare and cost as barriers to coming to court.</p>
+        <p>In <i>Berkland v R</i>, the Supreme Court said background can lower a sentence where it helped cause the offending, and that independent evidence may be more convincing. One barrister has reported judges hesitating to hear cultural evidence without a report writer. Scholars warn this can push family voices aside.</p>
+      </details>
+
+      <a class="go" href="#sentencing" data-next hidden>Go to sentencing</a>
+    </section>
+
+    <!-- 4 SENTENCING -->
+    <section class="page" id="p-sentencing" aria-labelledby="h-sent">
+      <p class="place">Courtroom 3, six months after the call</p>
+      <h1 id="h-sent" tabindex="-1">Sentencing</h1>
+      <div class="scene">
+        <p>The guard's <button class="term" aria-expanded="false" aria-controls="d-vis">victim impact statement</button> is read. He still doesn't sleep well. His voice matters too, and the law protects it.</p>
+        <span class="def" id="d-vis" hidden>The victim's own account of how the crime affected them, given to the judge.</span>
+        <p>The judge sets a starting point, then adjusts for Vili's guilty plea, age and background.</p>
+      </div>
+
+      <div class="plain">
+        <h3>Why two years matters</h3>
+        <p>If the final sentence is two years or less, the judge can consider <button class="term" aria-expanded="false" aria-controls="d-hd">home detention</button> instead of prison. A discount for background can be the difference.</p>
+        <span class="def" id="d-hd" hidden>Serving a sentence at an approved home address, with an electronic monitor.</span>
+        <p>Since June 2025, discounts for personal factors in prison sentences are generally capped at 40% in total.</p>
+      </div>
+
+      <p>Kui has been trying to find the money for a report.</p>
+      <button class="go" id="reveal">See what happened</button>
+
+      <div aria-live="polite">
+        <div class="outcome" id="end-a" hidden>
+          <h2 style="margin-top:0">Kui found the money</h2>
+          <p>A report writer who knows the Tongan community in Ōtara spends hours with Kui and Vili. The report connects the dawn raid, the crowded house and the lost shifts to how Vili ended up in that car. It finds him a place at Uncle Tevita's in Māngere and a Pacific youth programme.</p>
+          <p>The judge gives a discount for his background. The sentence comes in just under two years: home detention at Uncle Tevita's.</p>
+          <div class="desk"><b>On the judge's desk</b><ul><li>Your letter</li><li>An independent report</li><li>A plan for housing and support</li></ul></div>
+        </div>
+        <div class="outcome" id="end-b" hidden>
+          <h2 style="margin-top:0">Kui couldn't find the money</h2>
+          <p>There's no report. Your letter is read. The judge accepts that Vili is young and pleaded guilty, but nothing independent links his background to the offending, and there's no plan for where he'd live.</p>
+          <p>The sentence comes in just over two years. Vili goes to prison.</p>
+          <div class="desk"><b>On the judge's desk</b><ul><li>Your letter</li></ul></div>
+        </div>
+      </div>
+
+      <div id="after" hidden>
+        <p class="same">The offence and the family were the same. The difference was whether there was money that month.</p>
+        <button class="go quiet" id="other">See the other ending</button>
+        <p style="margin-top:1.5rem">Either way, the remand, the lost job and the guard's injury had already happened. Section 27 can change a sentence. It can't reach back to the night of the call.</p>
+        <details class="why">
+          <summary>Where this comes from</summary>
+          <p>The two endings borrow a device from Barbara-Luhia Graham, whose story of Fetu turns on whether a report is written. Home detention needs a sentence of two years or less (Sentencing Act 2002, s 15A). The 40% cap (s 9Q) has an exception for manifest injustice.</p>
+        </details>
+        <a class="go" href="#cliff" data-next>Go back to the top of the cliff</a>
+      </div>
+    </section>
+
+    <!-- 5 THE CLIFF -->
+    <section class="page" id="p-cliff" aria-labelledby="h-cliff">
+      <h1 id="h-cliff" tabindex="-1">Replay with change</h1>
+      <p class="lede">An old saying asks whether to build a fence at the top of a cliff or park an ambulance at the bottom. Section 27 is the ambulance. It helps the people it reaches, but it arrives last.</p>
+      <p>Here is Vili's story again. Switch on changes Pacific Knowledge Holders and researchers have called for, and watch where his story first gets heard.</p>
+
+      <div class="firstheard" aria-live="polite">
+        <p>Vili's story first reaches the system <strong id="heardAt">at sentencing, six months after the call</strong></p>
+      </div>
+
+      <ol class="cliff">
+        <li class="ledge" data-at="before anything happens, through people who know him" data-rank="1">
+          <span class="fence" aria-hidden="true"></span>
+          <h3>Before the call</h3>
+          <p class="was">Nobody outside the family knows Vili is struggling.</p>
+          <label class="switch"><input type="checkbox"><span>Pacific-led community services</span></label>
+          <p class="now" hidden>A Pacific youth service already knows Vili. When his shifts are cut, it helps with work and housing. Maybe the phone never rings.</p>
+        </li>
+        <li class="ledge" data-at="the morning after the arrest" data-rank="2">
+          <span class="fence" aria-hidden="true"></span>
+          <h3>The night of the arrest</h3>
+          <p class="was">Nobody in the family knows how to get a lawyer.</p>
+          <label class="switch"><input type="checkbox"><span>Free early legal help and community law</span></label>
+          <p class="now" hidden>A community law worker rings Kui next morning and explains what happens, in the language she prefers.</p>
+        </li>
+        <li class="ledge" data-at="at his first court appearance" data-rank="3">
+          <span class="fence" aria-hidden="true"></span>
+          <h3>The bail hearing</h3>
+          <p class="was">No address. Four months on remand.</p>
+          <label class="switch"><input type="checkbox"><span>A Pacific liaison officer at court</span></label>
+          <p class="now" hidden>The liaison officer finds Uncle Tevita's address before the case is called. Vili gets bail and keeps his job.</p>
+        </li>
+        <li class="ledge" data-at="before sentencing, whatever the family can afford" data-rank="4">
+          <span class="fence" aria-hidden="true"></span>
+          <h3>Being heard</h3>
+          <p class="was">A report depends on money. Speaking depends on time off.</p>
+          <label class="switch"><input type="checkbox"><span>Funded reports by accredited Pacific writers</span></label>
+          <p class="now" hidden>The report gets written whether or not Kui finds the money.</p>
+          <label class="switch"><input type="checkbox"><span>A court navigator for families</span></label>
+          <p class="now" hidden>A navigator helps you speak in person, and the hearing is set around your shift.</p>
+        </li>
+        <li class="ledge" data-rank="9">
+          <span class="fence" aria-hidden="true"></span>
+          <h3>Across the whole cliff</h3>
+          <p class="was">Nobody can see where Pacific people are lost along the way.</p>
+          <label class="switch"><input type="checkbox"><span>Accurate ethnicity records</span></label>
+          <p class="now" hidden>Agencies can see where Pacific people fall through, and be held to fixing it.</p>
+        </li>
+      </ol>
+
+      <div class="bottom" aria-live="polite">
+        <h3>The bottom of the cliff: sentencing</h3>
+        <p id="bottomText">The court hears Vili's story for the first time, after everything else has happened.</p>
+      </div>
+
+      <details class="why">
+        <summary>Where these changes come from</summary>
+        <p>Report Two's Knowledge Holders; Graham and Khylee Quince (navigators); and the Ministry of Justice, which preferred funding reports by accredited writers. The detail belongs in talanoa with Pacific communities, including people harmed by crime, whose safety comes first.</p>
+      </details>
+
+      <h2>The cliff in numbers</h2>
+      <ul class="numbers">
+        <li><b>8.9% and 14.4%</b>Pacific share of the population (2023 Census) and of the prison population (June 2026).</li>
+        <li><b>9 to 2,429</b>Legal aid-funded section 27 reports, 2017 to 2022. Since funding stopped, substantially fewer reach the courts.</li>
+        <li><b>11% and 7%</b>Report use by Pacific and European/Other offenders for certain sentences in 2021–22. The Ministry warned ending funding would widen that gap.</li>
+        <li><b>About 10%</b>The Ministry's estimate of a report's average discount, which now competes for room under the 40% cap.</li>
+      </ul>
+      <p class="note">These figures come from different years and don't alone prove discrimination at sentencing.</p>
+
+      <h2>If someone you love is facing sentencing</h2>
+      <ul class="help">
+        <li>Ask their lawyer about section 27. Family and community can speak in court; a paid report isn't the only way.</li>
+        <li>The court can pause the case to allow this.</li>
+        <li>For free legal help, contact your local <a href="https://communitylaw.org.nz" rel="noopener">Community Law Centre</a>.</li>
+      </ul>
+      <p class="note">General information, not legal advice. Why a story? Pacific scholars use storytelling to show the law from the inside, and to ask whose knowledge counts.</p>
+
+      <p class="close">Being heard matters. Justice shouldn't wait for the bottom of the cliff.</p>
+      <button class="go quiet" id="restart">Start the story again</button>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <details>
+    <summary>Sources</summary>
+    <ul>
+      <li>Sentencing Act 2002, ss 9Q, 15A, 27; Bail Act 2000, s 8; Parole Act 2002, s 91; Legal Services Act 2011, s 99(4)(ca); Victims' Rights Act 2002, s 17.</li>
+      <li><i>Berkland v R</i> [2022] NZSC 143.</li>
+      <li>Ministry of Justice <i>Regulatory Impact Statement</i> (2023).</li>
+      <li>Litia Tuiburelevu and others <i>Pacific Peoples and the Criminal Justice System</i>, Reports One and Two (Borrin Foundation, 2023).</li>
+      <li>Barbara-Luhia Graham, in Sereana Naepi (ed) <i>Oceans Between Us</i> (2025).</li>
+      <li>Fuimaono Dylan Asafo (2020) 27 Canta LR 99.</li>
+      <li>Lucy Radich, Equal Justice Project (2025).</li>
+      <li>Ministry of Health <i>Tupu Ola Moui</i> (2025); LAWGENRL 458 Week 6 lecture.</li>
+    </ul>
+  </details>
+</footer>
+
+<script>
+(function(){
+  var order=["call","bail","heard","sentencing","cliff"];
+  var gaugeY={call:130,bail:240,heard:360,sentencing:484,cliff:50};
+  var gaugeX={call:112,bail:110,heard:106,sentencing:98,cliff:96};
+  var labels={call:"The call",bail:"Before court",heard:"Being heard",sentencing:"Sentencing",cliff:"Replay with change"};
+
+  function show(){
+    var id=(location.hash||"").replace("#","");
+    if(order.indexOf(id)<0) id="call";
+    var i=order.indexOf(id);
+    document.querySelectorAll(".page").forEach(function(p){p.classList.toggle("on",p.id==="p-"+id)});
+    document.querySelectorAll("[data-step]").forEach(function(a){
+      if(a.dataset.step===id) a.setAttribute("aria-current","step"); else a.removeAttribute("aria-current");
+    });
+    document.body.dataset.depth = id==="cliff" ? "1" : String(i+1);
+    var m=document.getElementById("marker");
+    m.setAttribute("cy",gaugeY[id]); m.setAttribute("cx",gaugeX[id]);
+    document.getElementById("miniFill").style.width=((i+1)/5*100)+"%";
+    document.getElementById("miniCap").textContent="Step "+(i+1)+" of 5: "+labels[id];
+    document.title=(id==="call"?"":labels[id]+" | ")+"Heard Too Late";
+    window.scrollTo(0,0);
+    var h=document.querySelector("#p-"+id+" h1");
+    if(h && document.readyState==="complete") h.focus({preventScroll:true});
+  }
+  window.addEventListener("hashchange",show);
+  window.addEventListener("load",show);
+  show();
+
+  // glossary terms
+  document.querySelectorAll(".term").forEach(function(b){
+    b.addEventListener("click",function(){
+      var d=document.getElementById(b.getAttribute("aria-controls"));
+      var open=b.getAttribute("aria-expanded")==="true";
+      b.setAttribute("aria-expanded",String(!open)); d.hidden=open;
+    });
+  });
+
+  // choices
+  document.querySelectorAll(".choice").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      if(btn.classList.contains("locked")) {document.getElementById(btn.dataset.res).hidden=false; return;}
+      btn.setAttribute("aria-pressed","true");
+      document.getElementById(btn.dataset.res).hidden=false;
+      if(btn.hasAttribute("data-lock")){btn.classList.add("locked");btn.setAttribute("aria-disabled","true");}
+      var page=btn.closest(".page");
+      var next=page.querySelector("[data-next]"); if(next) next.hidden=false;
+      var ob=page.querySelector("#o-bail"); if(ob) ob.hidden=false;
+    });
+  });
+
+  // sentencing endings
+  var first=null;
+  document.getElementById("reveal").addEventListener("click",function(){
+    first = Math.random()<0.5 ? "a" : "b";
+    document.getElementById("end-"+first).hidden=false;
+    document.getElementById("after").hidden=false;
+    this.hidden=true;
+  });
+  document.getElementById("other").addEventListener("click",function(){
+    document.getElementById("end-a").hidden=false;
+    document.getElementById("end-b").hidden=false;
+    this.hidden=true;
+  });
+
+  // the cliff
+  var ledges=[].slice.call(document.querySelectorAll(".ledge"));
+  function updateCliff(){
+    var earliest=null, any=false;
+    ledges.forEach(function(l){
+      var boxes=[].slice.call(l.querySelectorAll("input"));
+      var lit=false;
+      boxes.forEach(function(b){
+        var now=b.closest(".switch").nextElementSibling;
+        now.hidden=!b.checked; if(b.checked){lit=true;any=true;}
+      });
+      l.classList.toggle("lit",lit);
+      if(lit && l.dataset.at && (earliest===null || +l.dataset.rank < +earliest.dataset.rank)) earliest=l;
+    });
+    document.getElementById("heardAt").textContent = earliest ? earliest.dataset.at : (any ? "at sentencing, but the pattern is now visible" : "at sentencing, six months after the call");
+    document.getElementById("bottomText").textContent = any
+      ? "Vili is still sentenced and still accountable, and the guard is still heard. But the court is no longer the first to ask who Vili is, and the support already exists. No lighter sentence is promised."
+      : "The court hears Vili's story for the first time, after everything else has happened.";
+  }
+  document.querySelectorAll(".cliff input").forEach(function(b){b.addEventListener("change",updateCliff)});
+
+  // restart
+  document.getElementById("restart").addEventListener("click",function(){
+    document.querySelectorAll(".result,.outcome,.def,.page > [data-next]").forEach(function(e){e.hidden=true});
+    document.getElementById("after").hidden=true;
+    document.querySelectorAll(".choice").forEach(function(b){b.setAttribute("aria-pressed","false");b.classList.remove("locked");b.removeAttribute("aria-disabled")});
+    document.querySelectorAll(".term").forEach(function(b){b.setAttribute("aria-expanded","false")});
+    document.getElementById("reveal").hidden=false; document.getElementById("other").hidden=false;
+    document.querySelectorAll(".cliff input").forEach(function(b){b.checked=false}); updateCliff();
+    location.hash="#call";
+  });
+})();
+</script>
+</body>
+</html>
