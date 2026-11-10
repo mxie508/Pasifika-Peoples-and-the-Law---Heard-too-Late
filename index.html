@@ -230,6 +230,12 @@ body[data-page="cliff"]{background:linear-gradient(180deg,var(--paper) 0%,var(--
 footer{border-top:0;background:var(--card);max-width:none;padding-left:max(1.25rem,calc((100% - 1100px)/2 + 1.25rem));padding-right:max(1.25rem,calc((100% - 1100px)/2 + 1.25rem))}
 @media (max-width:820px){.hero{flex-direction:column;align-items:stretch;min-height:0}.hero-art{position:relative;order:2;height:250px}.hero-text{order:1;padding:2.5rem 1.25rem .5rem}.hero::after{display:none}}
 @media (prefers-reduced-motion:reduce){.hero .moonglow,.hero .siren,.gauge .pulse{animation:none}}
+.opt{display:grid;gap:.4rem}
+.opt .result{margin:0 0 .4rem 1.1rem;border-left:3px solid var(--sea)}
+.opt .result.block{border-left-color:var(--alert)}
+.choice[aria-expanded="true"]{border-color:var(--sea);box-shadow:inset 4px 0 0 var(--sea)}
+.choice[aria-expanded="true"]::after{transform:rotate(135deg)}
+.choice.locked[aria-expanded="true"]::after,.choice.locked::after{transform:none}
 footer{max-width:1100px;margin:0 auto;padding:1.5rem 1.25rem 3rem;border-top:1px solid var(--line);font-size:.95rem;color:var(--muted)}
 footer details summary{cursor:pointer;color:var(--ink);font-weight:700}
 footer ul{padding-left:1.2rem}
@@ -252,7 +258,7 @@ footer li{margin-bottom:.35rem}
 </style>
 </head>
 <body data-depth="1">
-<a class="skip" href="#story">Skip to the story</a>
+<a class="skip" href="#story">Skip to story</a>
 
 <div class="topbar"><header class="top">
   <a class="brand" href="#call"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M0 4 H13 L15 8 L12 12 L15 16 L12 22 H0 Z" fill="currentColor" opacity=".8"/><rect x="0" y="2" width="13" height="2" fill="#3E9A5C"/></svg>Heard Too Late</a>
@@ -284,7 +290,7 @@ footer li{margin-bottom:.35rem}
   <div class="hero-text">
     <h1 id="h-call" tabindex="-1">Heard Too Late</h1>
     <p class="lede">A short story about a family and sentencing in the District Court.</p>
-    <p class="note">This Tongan family is fictional, but their story draws on New Zealand law and Pasifika-led research. No single story represents all Pasifika peoples. Content note: arrest and prison.</p>
+    <p class="note">This Tongan family is fictional, but their story draws on New Zealand law and Pasifika-led research. No single story represents all Pasifika peoples.</p>
     <button class="begin" id="begin">Begin</button>
   </div>
 </section>
@@ -316,25 +322,23 @@ footer li{margin-bottom:.35rem}
   </figure>
 
   <main id="story" tabindex="-1">
-    <div class="mini" aria-hidden="true"><div class="bar"><div class="fill" id="miniFill"></div></div><p id="miniCap">Step 1 of 5</p></div>
+    <div class="mini" aria-hidden="true"><div class="bar"><div class="fill" id="miniFill"></div></div><p id="miniCap"></p></div>
     <!-- 1 THE ARREST -->
     <section class="page" id="p-call" aria-label="The arrest">
       <div class="scene">
         <div class="phone" role="img" aria-label="Incoming call from Nana Alisi at 2.14am"><span class="sub">2.14am</span><span class="who">Nana Alisi</span><span class="sub">mobile</span><span class="btns" aria-hidden="true"><span class="no"></span><span class="yes"></span></span></div>
         <p class="place">Ōtara, 2.14am</p>
         <p>You're working a late-night shift when your grandmother rings. Nana Alisi never rings this late; you nearly let it go to voicemail.</p>
-        <p class="quote">"They've arrested Sione. He's at the station asking for you."</p>
-        <p>Sione is your cousin, 19, and the one the little kids follow around. Since his mum moved to Brisbane for work he's been on Alisi's couch (or in his car, when the house is full). Last month the packhouse cut his shifts.</p>
+        <p class="quote">"They've arrested Sione. He's at the police station asking for you."</p>
+        <p>Sione is your cousin, 19, and the one the little kids follow around. Since his dad died and mum moved to Brisbane for work he's been on Alisi's couch (or in his car, when the house is full). Last month the packhouse cut his shifts.</p>
         <p>Tonight he drove two older guys to a liquor store and waited outside while they broke in. When they ran, one of them knocked a security guard to the ground.</p>
       </div>
       <p class="prompt" id="q-call">What do you do?</p>
       <div class="choices" role="group" aria-labelledby="q-call">
-        <button class="choice" aria-pressed="false" data-res="r-call-1">Drive to the station</button>
-        <button class="choice" aria-pressed="false" data-res="r-call-2">Message the family chat</button>
-      </div>
-      <div aria-live="polite">
-        <div class="result" id="r-call-1" hidden><p>They won't let you see him. An officer says he'll appear before a judge in the morning.</p></div>
-        <div class="result" id="r-call-2" hidden><p>Uncle Tevita replies "get him a lawyer". Nobody replies to that.</p></div>
+        <div class="opt"><button class="choice" aria-expanded="false" aria-controls="r-call-1">Drive to the Police station</button>
+          <div class="result" id="r-call-1" hidden><p>They won't let you see him. An officer says he'll appear before a judge in the morning.</p></div></div>
+        <div class="opt"><button class="choice" aria-expanded="false" aria-controls="r-call-2">Message the family chat</button>
+          <div class="result" id="r-call-2" hidden><p>Uncle Tevita replies "get him a lawyer". Nobody replies to that.</p></div></div>
       </div>
       <a class="go" href="#bail" data-next hidden>Go to court</a>
     </section>
@@ -349,19 +353,17 @@ footer li{margin-bottom:.35rem}
       </div>
       <p class="prompt" id="q-bail">What do you tell her?</p>
       <div class="choices" role="group" aria-labelledby="q-bail">
-        <button class="choice" aria-pressed="false" data-res="r-bail-1">"He can stay at Alisi's."</button>
-        <button class="choice" aria-pressed="false" data-res="r-bail-2">"He's got nowhere to stay."</button>
-        <button class="choice" aria-pressed="false" data-res="r-bail-3">Tell her about his life</button>
-      </div>
-      <div aria-live="polite">
-        <div class="result" id="r-bail-1" hidden><p>Alisi's house already has eleven people in three bedrooms. The lawyer doubts a judge will accept it as a bail address.</p></div>
-        <div class="result" id="r-bail-2" hidden><p>She writes that down. "Okay. Then I don't have an address to give the judge."</p></div>
-        <div class="result" id="r-bail-3" hidden><p>You start telling her about his mum going to Brisbane, and his nights in the car. She listens, then says, "That may matter later. Right now I need an address."</p></div>
+        <div class="opt"><button class="choice" aria-expanded="false" aria-controls="r-bail-1">"He can stay at Alisi's."</button>
+          <div class="result" id="r-bail-1" hidden><p>Alisi's house already has eleven people in three bedrooms. The lawyer doubts a judge will accept it as a bail address.</p></div></div>
+        <div class="opt"><button class="choice" aria-expanded="false" aria-controls="r-bail-2">"He's got nowhere to stay."</button>
+          <div class="result" id="r-bail-2" hidden><p>She writes that down. "Okay. Then I don't have a suitable address to give the judge."</p></div></div>
+        <div class="opt"><button class="choice" aria-expanded="false" aria-controls="r-bail-3">Tell her about his life</button>
+          <div class="result" id="r-bail-3" hidden><p>You start telling her about his mum going to Brisbane, and his nights in the car. She listens, then says, "That may matter later. Right now I need a suitable address."</p></div></div>
       </div>
       <div class="outcome" id="o-bail" hidden aria-live="polite">
         <p>Without a suitable address or a plan to manage the risks, Sione is <button class="term" aria-expanded="false" aria-controls="d-remand">remanded in custody</button>.</p>
         <span class="def" id="d-remand" hidden>Kept in prison while the case carries on, before any sentence.</span>
-        <p>He spends the next five months there. The packhouse lets him go in the second week, and his car gets towed before anyone thinks to move it.</p>
+        <p>He spends the next five months there. The packhouse fires him in the second week, and his car gets towed before anyone thinks to move it.</p>
         <p>Nobody in court had time to explore why he'd been sleeping in his car.</p>
       </div>
       <details class="why">
@@ -385,30 +387,28 @@ footer li{margin-bottom:.35rem}
       </div>
       <p class="prompt" id="q-heard">Sentencing is in three weeks. Try each option.</p>
       <div class="choices" role="group" aria-labelledby="q-heard">
-        <button class="choice" aria-pressed="false" data-res="r-heard-1" data-lock><span>Get a cultural report written</span></button>
-        <button class="choice" aria-pressed="false" data-res="r-heard-2" data-lock><span>Speak in court yourself</span></button>
-        <button class="choice" aria-pressed="false" data-res="r-heard-3">Write a letter to the judge</button>
-      </div>
-      <div aria-live="polite">
-        <div class="result block" id="r-heard-1" hidden>
-          <p>Since March 2024, <button class="term" aria-expanded="false" aria-controls="d-la">legal aid</button> has not paid for section 27 reports, so the family would have to pay for one. Alisi says she'll ask around the family.</p>
-          <span class="def" id="d-la" hidden>Government funding for a lawyer, and some costs, for people who can't afford one.</span>
-        </div>
-        <div class="result block" id="r-heard-2" hidden>
-          <p>You swap a shift to get the day off, then the hearing gets moved. You swap again, it moves again, and this time your manager says no.</p>
-        </div>
-        <div class="result" id="r-heard-3" hidden>
-          <div class="letter" aria-label="Your letter">
-            <p>To the Judge,</p>
-            <p>I'm Sione's older cousin. I want you to know he's a kind, hard-working boy and what he's like at home. When Alisi (our grandmother) was young, police came to her house before it was light, looking for overstayers. Sione walks the little ones to school...</p>
-          </div>
-          <p>You finish at 4am. The lawyer files it, but explains the court will need to see how Sione's experiences relate to his offending, and a family letter sometimes counts for less than an independent report.</p>
-        </div>
+        <div class="opt"><button class="choice" aria-expanded="false" aria-controls="r-heard-1" data-lock><span>Get a cultural report written</span></button>
+          <div class="result block" id="r-heard-1" hidden>
+            <p>Since March 2024, <button class="term" aria-expanded="false" aria-controls="d-la">legal aid</button> has not paid for section 27 reports, so the family would have to pay for one. Alisi says she'll ask around the family for help.</p>
+            <span class="def" id="d-la" hidden>Government funding for a lawyer, and some costs, for people who can't afford one.</span>
+          </div></div>
+        <div class="opt"><button class="choice" aria-expanded="false" aria-controls="r-heard-2" data-lock><span>Speak in court yourself</span></button>
+          <div class="result block" id="r-heard-2" hidden>
+            <p>You swap a shift to get the day off, then the hearing gets moved. You swap again, it moves again, and this time your manager says no.</p>
+          </div></div>
+        <div class="opt"><button class="choice" aria-expanded="false" aria-controls="r-heard-3">Write a letter to the judge</button>
+          <div class="result" id="r-heard-3" hidden>
+            <div class="letter" aria-label="Your letter">
+              <p>To the Judge,</p>
+              <p>I'm Sione's older cousin. I want you to know he's a kind, hard-working boy and what he's like at home. When Alisi (our grandmother) was young, police came to her house before it was light, looking for overstayers. Sione walks the little ones to school...</p>
+            </div>
+            <p>You finish your letter at 4am. The lawyer files it, but explains the court will need to see how Sione's experiences relate to his offending, and a family letter sometimes counts for less than an independent report.</p>
+          </div></div>
       </div>
       <details class="why">
         <summary>The law and research behind this</summary>
-        <p>Since the Legal Services Amendment Act 2024, legal aid won't pay for section 27 reports or statements. Pacific people who shared their experience for a 2023 Pacific-led report (Borrin Foundation) describe shift work and childcare making it hard to come to court.</p>
-        <p>In <i>Berkland v R</i> (2022), the Supreme Court said background can reduce a sentence where it helped cause the offending, and independent evidence may be more convincing. Barrister Kingi Snelgar says some judges prefer evidence from a report writer (Equal Justice Project, 2025). Legal scholar Khylee Quince worries reports push family voices out (Barbara-Luhia Graham, <i>Oceans Between Us</i>, 2025).</p>
+        <p>Since the Legal Services Amendment Act 2024, legal aid won't pay for section 27 reports or statements. Pacific people who shared their experience for a 2023 Pacific-led report (Report 2) describe shift work and childcare making it hard to come to court.</p>
+        <p>In <i>Berkland v R</i> (2022), the Supreme Court said background can reduce a sentence where it helped cause the offending, and independent evidence may be more convincing. Barrister Kingi Snelgar says some judges prefer evidence from a report writer (Equal Justice Project, 2025). Legal scholar Khylee Quince worries reports push family voices out (Barbara-Luhia Graham, 2025).</p>
       </details>
       <a class="go" href="#sentencing" data-next hidden>Go to sentencing</a>
     </section>
@@ -423,7 +423,7 @@ footer li{margin-bottom:.35rem}
       </div>
       <div class="plain" data-badge="s 15A">
         <h3>The two-year line</h3>
-        <p>If the final sentence is two years or less and there's a suitable home address, the judge can consider <button class="term" aria-expanded="false" aria-controls="d-hd">home detention</button> instead of prison. So a background discount can decide which one.</p>
+        <p>If the final sentence is two years or less and there's a suitable home address, the judge can consider <button class="term" aria-expanded="false" aria-controls="d-hd">home detention</button> instead of prison. So a background discount can decide which one is available.</p>
         <span class="def" id="d-hd" hidden>Serving a sentence at an approved home address, with an electronic monitor.</span>
         <p>Since June 2025, discounts for personal factors are generally capped at 40%.</p>
       </div>
@@ -433,23 +433,23 @@ footer li{margin-bottom:.35rem}
         <div class="outcome" id="end-a" hidden>
           <h2 style="margin-top:0">Alisi found the money</h2>
           <p>Alisi borrows it from her sister. A report writer who knows the Tongan community in Ōtara meets Alisi and Sione. Her report traces the dawn raids through to the lost shifts and the night in the car, and sets him up to live at Uncle Tevita's in Māngere.</p>
-          <p>The judge gives a discount for his background. The end sentence is just under two years, so it can become home detention. Allowing for the five months already in custody, Sione serves a few months at Uncle Tevita's.</p>
+          <p>The judge gives a discount for his background. The end sentence is just under two years, so it can become home detention. The judge accounts for the five months already in custody, and sentences Sione to a few months' home detention at Uncle Tevita's.</p>
           <div class="desk"><b>On the judge's desk</b><ul class="papers"><li>Your letter</li><li>Independent report</li><li>Housing and support plan</li></ul></div>
         </div>
         <div class="outcome" id="end-b" hidden>
           <h2 style="margin-top:0">Alisi couldn't find the money</h2>
-          <p>There's no report, just your letter. The judge accepts Sione is young and pleaded guilty early, but the letter doesn't clearly link his background to the offending, and there's nowhere for him to live.</p>
+          <p>The judge only has your letter, and accepts Sione is young and pleaded guilty early, but the letter doesn't clearly link his background to the offending, and there's nowhere for him to live.</p>
           <p>The end sentence is a bit over two years, so home detention isn't available. Sione goes to prison.</p>
           <div class="desk"><b>On the judge's desk</b><ul class="papers"><li>Your letter</li></ul></div>
         </div>
       </div>
       <div id="after" hidden>
-        <p>Which ending you got was random. Real outcomes depend on each case.</p>
+        <p>Which ending you got was random. Practically, outcomes depend on each case's facts.</p>
         <button class="go quiet" id="other">See the other ending</button>
         <p style="margin-top:1.5rem">Either way, Sione has already spent five months in custody.</p>
         <details class="why">
           <summary>Sources</summary>
-          <p>The two endings adapt Barbara-Luhia Graham's story of Fetu. Home detention is only possible if the prison sentence would otherwise be two years or less (Sentencing Act 2002, s 15A). The 40% cap is in s 9Q; s 9R allows more where the cap would be manifestly unjust.</p>
+          <p>The two endings adapt Barbara-Luhia Graham's story of Fetu. Home detention is only possible if the prison sentence would otherwise be two years or less (Sentencing Act 2002, s 15A). The 40% discount cap is in s 9Q; s 9R allows more where the cap would be manifestly unjust.</p>
         </details>
         <a class="go" href="#cliff" data-next>Back to the top of the cliff</a>
       </div>
@@ -457,7 +457,7 @@ footer li{margin-bottom:.35rem}
     <!-- 5 REPLAY -->
     <section class="page" id="p-cliff" aria-labelledby="h-cliff">
       <h1 id="h-cliff" tabindex="-1">What if it went differently?</h1>
-      <p class="lede">There's an old question: build a fence at the top of the cliff, or park an ambulance at the bottom? Section 27 is the ambulance. It turns up after most of the damage is done. Barbara-Luhia Graham records the criticism that it is "too little too late".</p>
+      <p class="lede">Should we build a fence at the top of the cliff, or park an ambulance at the bottom? Section 27 is like the ambulance. It turns up after most of the damage is done. Barbara-Luhia Graham records the criticism that it is "too little too late".</p>
       <p>Here's Sione's story again, with changes Pacific researchers and community members have asked for. Switch them on and see what they change.</p>
       <div class="firstheard" aria-live="polite">
         <p>Someone in the system first hears Sione's story <strong id="heardAt">at sentencing, five months after the arrest</strong></p>
@@ -476,7 +476,7 @@ footer li{margin-bottom:.35rem}
           <h3>The night of the arrest</h3>
           <p class="was">Nobody in the family knows how to get a lawyer.</p>
           <label class="switch"><input type="checkbox"><span>Free early legal help and community law</span></label>
-          <p class="now" hidden>A community law worker calls Alisi next morning and explains what will happen, in Tongan.</p>
+          <p class="now" hidden>A community law worker calls Alisi the next morning and explains what will happen, in Tongan.</p>
         </li>
         <li class="ledge" data-at="at his first court appearance" data-rank="3">
           <span class="fence" aria-hidden="true"></span>
@@ -484,8 +484,8 @@ footer li{margin-bottom:.35rem}
           <p class="was">No address. Five months remanded in custody.</p>
           <label class="switch"><input type="checkbox"><span>A Pacific liaison officer at court</span></label>
           <p class="now" hidden>Before the case is called, a liaison officer rings Uncle Tevita, who agrees to have Sione. He gets bail and keeps his job.</p>
-          <label class="switch"><input type="checkbox"><span>A bail house with a bed free</span></label>
-          <p class="now" hidden>Someone from a South Auckland bail house stands up in the public gallery and offers Sione a bed. The judge grants bail.</p>
+          <label class="switch"><input type="checkbox"><span>A bail house charity with a bed free</span></label>
+          <p class="now" hidden>Someone from an Auckland bail house charity stands up in the public gallery and offers Sione a bed. The judge grants bail.</p>
         </li>
         <li class="ledge" data-at="before sentencing, without the family paying" data-rank="4">
           <span class="fence" aria-hidden="true"></span>
@@ -501,7 +501,7 @@ footer li{margin-bottom:.35rem}
           <h3>Across the whole cliff</h3>
           <p class="was">Ethnicity isn't recorded well, so it's hard to see where Pasifika people fall through the gaps.</p>
           <label class="switch"><input type="checkbox"><span>Accurate ethnicity records</span></label>
-          <p class="now" hidden>Police, the courts and Corrections can see where Pasifika people miss out on support, and fix it.</p>
+          <p class="now" hidden>Police, the courts and the Government can see where Pasifika people miss out on support, and fix it.</p>
         </li>
       </ol>
       <div class="bottom" aria-live="polite">
@@ -510,27 +510,25 @@ footer li{margin-bottom:.35rem}
       </div>
       <details class="why">
         <summary>Where these ideas come from</summary>
-        <p>Most of these proposals come from <i>Pacific Peoples and the Criminal Justice System in Aotearoa New Zealand: Report Two</i> (Borrin Foundation, 2023). Court navigators come from legal scholar Khylee Quince and Barbara-Luhia Graham. Funding accredited report writers was the Ministry of Justice's own preferred option before funding was cut. The details should be worked out through talanoa with Pacific communities, including people harmed by crime.</p>
+        <p>Most of these proposals come from <i>Pacific Peoples and the Criminal Justice System in Aotearoa New Zealand: Report Two</i> (2023). Court navigators come from legal scholar Khylee Quince and Barbara-Luhia Graham. Funding accredited report writers was the Ministry of Justice's own preferred option before funding was cut. The bail-house scene draws on my Police Prosecution Service internship: I saw a Grace Foundation worker offer a defendant accommodation from the public gallery. The details should be worked out through talanoa with Pacific communities, including all community voices.</p>
       </details>
       <h2>Some numbers</h2>
       <ul class="numbers">
-        <li><b>8.9% and 14.4%</b>Pacific share of New Zealand's population (2023 Census) and of the prison population (March 2026).
-          <span class="bars" aria-hidden="true"><span>Population</span><i style="--w:62%"></i><span>Prison</span><i class="hot" style="--w:100%"></i></span></li>
-        <li><b>9 to 2,429</b>Legal aid-funded section 27 reports, 2017 to 2022. Numbers rose after a 2018 High Court case (<i>Solicitor-General v Heta</i>). Legal aid stopped paying in March 2024; far fewer reports now reach the courts.
+        <li><b>8.9% and 14.1%</b>Pacific share of New Zealand's population (2023 Census) and of the prison population (March 2026).
+          <span class="bars" aria-hidden="true"><span>Population</span><i style="--w:63%"></i><span>Prison</span><i class="hot" style="--w:100%"></i></span></li>
+        <li><b>9 to 2,429</b>Publicly funded section 27 reports, 2017 to 2022. Numbers rose after a 2018 High Court case (<i>Solicitor-General v Heta</i>) confirmed that background matters at sentencing. Legal aid stopped paying in March 2024. Since then, far fewer reach the courts.
           <span class="bars" aria-hidden="true"><span>2017</span><i style="--w:2px"></i><span>2022</span><i class="hot" style="--w:100%"></i></span></li>
-        <li><b>11% and 7%</b>Section 27 report use among Pacific and European/Other offenders for certain sentences, 2021–2022. The Ministry of Justice warned ending funding would worsen unequal access.
-          <span class="bars" aria-hidden="true"><span>Pacific</span><i class="hot" style="--w:100%"></i><span>European/Other</span><i style="--w:64%"></i></span></li>
-        <li><b>About 10%</b>Early Ministry research put the average discount for a section 27 report at about 10%, which now has to fit under the 40% cap.
+        <li><b>About 10%</b>Early Ministry research put the average discount for a section 27 report at about 10%, which now has to fit under the 40% discount cap.
           <span class="bars" aria-hidden="true"><span>Report</span><i class="hot" style="--w:25%"></i><span>Cap</span><i style="--w:100%"></i></span></li>
       </ul>
-      <p class="note">(Figures cover different years and measures; prison figures include remand.)</p>
+      <p class="note">(Figures cover different periods and measures; prison figures include remand.)</p>
       <h2>If someone you love is facing sentencing</h2>
       <ul class="help">
-        <li>Ask their lawyer about section 27. Family and community can speak in court; a paid report isn't the only way to be heard.</li>
-        <li>For free legal help: your local <a href="https://communitylaw.org.nz" rel="noopener">Community Law Centre</a>, Citizens Advice Bureau (<a href="tel:0800367222">0800 367 222</a>) or, if you're 25 or under, Youth Law (<a href="tel:0800884529">0800 884 529</a>).</li>
+        <li>Ask their lawyer about section 27. Family and community members can speak in court; a paid report isn't the only way to be heard.</li>
+        <li>For free legal help: your local <a href="https://communitylaw.org.nz" rel="noopener">Community Law Centre</a>, Citizens Advice Bureau (<a href="tel:0800367222">0800 367 222</a>) or, if you're under 25, Youth Law (<a href="tel:0800884529">0800 884 529</a>).</li>
         <li>Need a bail address? Organisations such as the Grace Foundation Charitable Trust provide bail accommodation and support (<a href="https://gracefoundation.co.nz" rel="noopener">gracefoundation.co.nz</a>).</li>
       </ul>
-      <p class="note">General information, not legal advice. Services have eligibility rules and waitlists.</p>
+      <p class="note">General educational information, not legal advice. Services have eligibility rules and waitlists.</p>
       <button class="go quiet" id="restart">Start the story again</button>
     </section>
   </main>
@@ -559,7 +557,7 @@ footer li{margin-bottom:.35rem}
     document.getElementById("marker").setAttribute("transform","translate("+gaugeX[id]+" "+gaugeY[id]+")");
     document.querySelectorAll(".gauge .lbl").forEach(function(t){t.classList.toggle("cur",t.id==="g-"+id)});
     document.getElementById("miniFill").style.width=((i+1)/5*100)+"%";
-    document.getElementById("miniCap").textContent="Step "+(i+1)+" of 5: "+labels[id];
+    document.getElementById("miniCap").textContent="";
     document.title=(id==="call"?"":labels[id]+" | ")+"Heard Too Late";
     window.scrollTo(0,0);
     var h=document.querySelector(id==="call" ? "#h-call" : "#p-"+id+" h1");
@@ -584,19 +582,21 @@ footer li{margin-bottom:.35rem}
     });
   });
 
-  // choices
+  // choices: each result sits under its own choice; one open per group
   document.querySelectorAll(".choice").forEach(function(btn){
     btn.addEventListener("click",function(){
-      if(btn.classList.contains("locked")) {document.getElementById(btn.dataset.res).hidden=false; return;}
-      btn.setAttribute("aria-pressed","true");
-      document.getElementById(btn.dataset.res).hidden=false;
+      var group=btn.closest(".choices");
+      group.querySelectorAll(".choice").forEach(function(b){
+        var r=document.getElementById(b.getAttribute("aria-controls"));
+        var on=(b===btn);
+        r.hidden=!on; b.setAttribute("aria-expanded",String(on));
+      });
       if(btn.hasAttribute("data-lock")){btn.classList.add("locked");btn.setAttribute("aria-disabled","true");}
       var page=btn.closest(".page");
-      var next=page.querySelector("[data-next]"); if(next) next.hidden=false;
+      var next=page.querySelector(".page > [data-next]"); if(next) next.hidden=false;
       var ob=page.querySelector("#o-bail"); if(ob) ob.hidden=false;
     });
   });
-
   // sentencing endings
   var first=null;
   document.getElementById("reveal").addEventListener("click",function(){
@@ -628,9 +628,9 @@ footer li{margin-bottom:.35rem}
     var dots=document.querySelectorAll(".firstheard .track i");
     var r=earliest ? +earliest.dataset.rank : 5;
     dots.forEach(function(d,k){d.classList.toggle("on",k+1===r && r<5)});
-    document.getElementById("heardAt").textContent = earliest ? earliest.dataset.at : (any ? "at sentencing, but better records now show where Pasifika people miss out" : "at sentencing, five months after the arrest");
+    document.getElementById("heardAt").textContent = earliest ? earliest.dataset.at : (any ? "at sentencing, but better records now show where Pasifika people are missed" : "at sentencing, five months after the arrest");
     document.getElementById("bottomText").textContent = any
-      ? "Sione is still sentenced and the guard's statement is still read. But the judge isn't the first to ask about him, and help is already in place. The sentence isn't necessarily lower."
+      ? "Sione is still sentenced and the guard's statement is still read. But the judge isn't the first to ask about him, and some changes bring earlier help. The sentence isn't necessarily lower."
       : "This is the first time anyone official hears Sione's story.";
   }
   document.querySelectorAll(".cliff input").forEach(function(b){b.addEventListener("change",updateCliff)});
@@ -639,7 +639,7 @@ footer li{margin-bottom:.35rem}
   document.getElementById("restart").addEventListener("click",function(){
     document.querySelectorAll(".result,.outcome,.def,.page > [data-next]").forEach(function(e){e.hidden=true});
     document.getElementById("after").hidden=true;
-    document.querySelectorAll(".choice").forEach(function(b){b.setAttribute("aria-pressed","false");b.classList.remove("locked");b.removeAttribute("aria-disabled")});
+    document.querySelectorAll(".choice").forEach(function(b){b.setAttribute("aria-expanded","false");b.classList.remove("locked");b.removeAttribute("aria-disabled")});
     document.querySelectorAll(".term").forEach(function(b){b.setAttribute("aria-expanded","false")});
     document.getElementById("reveal").hidden=false; document.getElementById("other").hidden=false;
     document.querySelectorAll(".cliff input").forEach(function(b){b.checked=false}); updateCliff();
